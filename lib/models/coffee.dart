@@ -20,7 +20,7 @@ class Coffee extends Equatable {
   });
 
   @override
-  List<Object?> get props => [image]; // Unique identifier for comparison
+  List<Object?> get props => [image];
 
   @override
   String toString() {
@@ -28,12 +28,11 @@ class Coffee extends Equatable {
   }
 }
 
-// Sample coffee list
 final List<Coffee> listGridCoffee = [
   const Coffee(
     image: 'assets/coffee1.png',
     name: 'Caffee Mocha',
-    type: 'Deep Foam',
+    type: 'Cappuccino',
     rate: 4.8,
     review: 230,
     description:
@@ -53,7 +52,7 @@ final List<Coffee> listGridCoffee = [
   const Coffee(
     image: 'assets/coffee3.png',
     name: 'Mocha Fusi',
-    type: 'Ice/Hot',
+    type: 'Cappuccino',
     rate: 4.7,
     review: 180,
     description:
@@ -63,7 +62,7 @@ final List<Coffee> listGridCoffee = [
   const Coffee(
     image: 'assets/coffee4.png',
     name: 'Caffe Panna',
-    type: 'Ice/Hot',
+    type: 'Cappuccino',
     rate: 4.6,
     review: 160,
     description:
@@ -81,14 +80,53 @@ final List<Coffee> listGridCoffee = [
     price: 189.00,
   ),
   const Coffee(
+    image: 'assets/coffee7.png',
+    name: 'Irish Cream Latte',
+    type: 'Hot Coffee',
+    rate: 4.6,
+    review: 175,
+    description:
+    'Irish Cream Latte is a sweet, creamy coffee with notes of Irish cream, espresso, and steamed milk.',
+    price: 199.00,
+  ),
+  const Coffee(
     image: 'assets/coffee6.png',
     name: 'Vanilla Brew',
-    type: 'Signature Roast',
+    type: 'Creamy Roast',
     rate: 4.7,
     review: 210,
     description:
     'Vanilla Brew is a light roast infused with vanilla essence and topped with milk foam.',
     price: 169.00,
   ),
+  const Coffee(
+    image: 'assets/coffee8.png',
+    name: 'Cinnamon Dolce Latte',
+    type: 'Cappuccino',
+    rate: 4.5,
+    review: 190,
+    description:
+    'Cinnamon Dolce Latte features espresso, steamed milk, and sweet cinnamon syrup topped with whipped cream.',
+    price: 199.00,
+  ),
+  const Coffee(
+    image: 'assets/coffee9.png',
+    name: 'Iced Americano',
+    type: 'Americano',
+    rate: 4.3,
+    review: 100,
+    description:
+    'A refreshing iced Americano made with rich espresso and chilled water, perfect for hot days.',
+    price: 130.00,
+  ),
+  const Coffee(
+    image: 'assets/coffee10.png',
+    name: 'Classic Americano',
+    type: 'Americano',
+    rate: 4.6,
+    review: 140,
+    description:
+    'Smooth and bold Americano brewed with rich espresso and hot water.',
+    price: 125.00,
+  ),
 ];
-

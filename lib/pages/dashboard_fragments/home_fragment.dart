@@ -13,6 +13,48 @@ class HomeFragment extends StatefulWidget {
 
 class _HomeFragmentState extends State<HomeFragment> {
   String categorySelected = 'All Coffee';
+  String searchQuery = '';
+  List<Coffee> filteredCoffee = [];
+
+  final List<String> categories = [
+    'All Coffee',
+    'Cappuccino',
+    'Creamy Roast',
+    'Hot Coffee',
+    'Americano',
+    'Espresso',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _filterCoffeeList();
+  }
+
+  void _filterCoffeeList() {
+    List<Coffee> result = [];
+
+    if (categorySelected == 'All Coffee') {
+      result = listGridCoffee;
+    } else {
+      result = listGridCoffee
+          .where((coffee) =>
+      coffee.type.toLowerCase() == categorySelected.toLowerCase())
+          .toList();
+    }
+
+    if (searchQuery.isNotEmpty) {
+      result = result
+          .where((coffee) => coffee.name
+          .toLowerCase()
+          .contains(searchQuery.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      filteredCoffee = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +87,8 @@ class _HomeFragmentState extends State<HomeFragment> {
                 Gap(16.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: buildGridCoffee(constraints.maxWidth),
+                  child:
+                  buildGridCoffee(constraints.maxWidth, filteredCoffee),
                 ),
                 Gap(30.h),
               ],
@@ -73,10 +116,8 @@ class _HomeFragmentState extends State<HomeFragment> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Location',
-          style: TextStyle(fontSize: 12.sp, color: const Color(0xffA2A2A2)),
-        ),
+        Text('Location',
+            style: TextStyle(fontSize: 12.sp, color: Color(0xffA2A2A2))),
         Row(
           children: [
             Text(
@@ -84,15 +125,12 @@ class _HomeFragmentState extends State<HomeFragment> {
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14.sp,
-                color: const Color(0xffD8D8D8),
+                color: Color(0xffD8D8D8),
               ),
             ),
             Gap(4.w),
-            Image.asset(
-              'assets/ic_arrow_down.png',
-              height: 14.h,
-              width: 14.w,
-            ),
+            Image.asset('assets/ic_arrow_down.png',
+                height: 14.h, width: 14.w),
           ],
         ),
       ],
@@ -119,6 +157,10 @@ class _HomeFragmentState extends State<HomeFragment> {
                 Gap(8.w),
                 Expanded(
                   child: TextField(
+                    onChanged: (query) {
+                      searchQuery = query;
+                      _filterCoffeeList();
+                    },
                     style: TextStyle(fontSize: 14.sp, color: Colors.white),
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.zero,
@@ -127,7 +169,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                       hintText: 'Search coffee',
                       hintStyle: TextStyle(
                         fontSize: 14.sp,
-                        color: const Color(0xffA2A2A2),
+                        color: Color(0xffA2A2A2),
                       ),
                     ),
                   ),
@@ -167,43 +209,37 @@ class _HomeFragmentState extends State<HomeFragment> {
   }
 
   Widget buildCategories() {
-    final categories = [
-      'All Coffee',
-      'Indonesiano',
-      'Machiato',
-      'Latte',
-      'Americano',
-    ];
     return SizedBox(
-      height: 29.h,
+      height: 34.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
         itemCount: categories.length,
-        itemBuilder: (context, index) {
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        itemBuilder: (_, index) {
           final category = categories[index];
-          final isActive = categorySelected == category;
+          final isSelected = categorySelected == category;
+
           return GestureDetector(
-            onTap: () => setState(() => categorySelected = category),
+            onTap: () {
+              setState(() {
+                categorySelected = category;
+                _filterCoffeeList();
+              });
+            },
             child: Container(
-              margin: EdgeInsets.only(
-                left: index == 0 ? 24.w : 8.w,
-                right: index == categories.length - 1 ? 24.w : 0,
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              margin: EdgeInsets.only(right: 8.w),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
               decoration: BoxDecoration(
-                color: isActive
-                    ? const Color(0xffC67C4E)
-                    : const Color(0xffEDEDED).withAlpha(90),
-                borderRadius: BorderRadius.circular(6.r),
+                color: isSelected ? Color(0xffC67C4E) : Colors.grey[200],
+                borderRadius: BorderRadius.circular(8.r),
               ),
               alignment: Alignment.center,
               child: Text(
                 category,
                 style: TextStyle(
-                  fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+                  color: isSelected ? Colors.white : Colors.black87,
                   fontSize: 14.sp,
-                  color: isActive ? Colors.white : const Color(0xff313131),
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -213,85 +249,51 @@ class _HomeFragmentState extends State<HomeFragment> {
     );
   }
 
-  Widget buildGridCoffee(double width) {
+  Widget buildGridCoffee(double width, List<Coffee> coffeeList) {
     final isWide = width > 900;
     final crossAxisCount = isWide ? 4 : width > 600 ? 3 : 2;
 
     return GridView.builder(
-      shrinkWrap: true,
+      itemCount: coffeeList.length,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: listGridCoffee.length,
+      shrinkWrap: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
-        mainAxisExtent: 238.h,
-        crossAxisSpacing: 15.w,
+        mainAxisExtent: 250.h,
+        crossAxisSpacing: 16.w,
         mainAxisSpacing: 24.h,
       ),
-      itemBuilder: (context, index) {
-        final coffee = listGridCoffee[index];
+      itemBuilder: (_, index) {
+        final coffee = coffeeList[index];
+
         return GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, '/detail', arguments: coffee);
           },
           child: Container(
-            padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 12.h),
+            padding: EdgeInsets.all(8.w),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
+                )
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: Image.asset(
-                        coffee.image,
-                        height: 128.h,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Container(
-                        padding: EdgeInsets.all(6.w),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              const Color(0xff111111).withAlpha(77),
-                              const Color(0xff313131).withAlpha(77),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(12.r),
-                            bottomLeft: Radius.circular(24.r),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset(
-                              'assets/ic_star_filled.png',
-                              height: 12.h,
-                              width: 12.w,
-                            ),
-                            Gap(4.w),
-                            Text(
-                              '${coffee.rate}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 8.sp,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.r),
+                  child: Image.asset(
+                    coffee.image,
+                    height: 120.h,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 Gap(8.h),
                 Text(
@@ -301,15 +303,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16.sp,
-                    color: const Color(0xff242424),
                   ),
                 ),
-                Gap(4.h),
                 Text(
                   coffee.type,
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: const Color(0xffA2A2A2),
+                    color: Colors.grey,
                   ),
                 ),
                 const Spacer(),
@@ -320,22 +320,21 @@ class _HomeFragmentState extends State<HomeFragment> {
                       NumberFormat.currency(
                         locale: 'en_IN',
                         symbol: '₹',
-                        decimalDigits: 2,
                       ).format(coffee.price),
                       style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18.sp,
-                        color: const Color(0xff050505),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
                       ),
                     ),
                     Container(
-                      width: 32.w,
                       height: 32.h,
+                      width: 32.w,
                       decoration: BoxDecoration(
-                        color: const Color(0xffC67C4E),
+                        color: Color(0xffC67C4E),
                         borderRadius: BorderRadius.circular(8.r),
                       ),
-                      child: const Icon(Icons.add, color: Colors.white, size: 16),
+                      child:
+                      const Icon(Icons.add, color: Colors.white, size: 16),
                     ),
                   ],
                 ),
@@ -347,6 +346,10 @@ class _HomeFragmentState extends State<HomeFragment> {
     );
   }
 }
+
+
+
+
 
 
 
