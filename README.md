@@ -1,16 +1,37 @@
-# coffee_shop_ui
+☕ Coffee Craze
+A modern Flutter coffee shop app with a sleek UI, category filters, favorites, search, and product details. Designed for a smooth shopping experience with responsive layouts.
 
-A new Flutter project.
+📱 Features
+🏠 Home Screen with categories (Hot Coffee, Cold Coffee, etc.)
 
-## Getting Started
+❤️ Favorites – Save and view your favorite coffees
 
-This project is a starting point for a Flutter application.
+🔍 Search – Find coffee quickly
 
-A few resources to get you started if this is your first Flutter project:
+📄 Details Page with image hero animation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+🛒 Add to Cart (optional future update)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+📂 BLoC Architecture for clean state management
+
+🌙 Dark Mode Support (optional future update)
+
+🛠 Tech Stack
+Flutter – Frontend UI framework
+
+BLoC – State management
+
+Dart – Programming language
+
+📦 Installation
+# Clone the repository
+git clone https://github.com/Utkarshkhotele/Coffee-Craze.git
+
+# Navigate to the project folder
+cd Coffee-Craze
+
+# Get dependencies
+flutter pub get
+
+# Run the app
+flutter run
